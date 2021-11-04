@@ -9,7 +9,28 @@
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">Leaflet map</h1>
       </div>
-      <div class="my-4 w-100" class="map" appLeafletMap [latlngs]="latLngs" ></div>
+      <div class="my-4 w-100" class="map" appLeafletMap [latlngs]="latLngs"
+          (mappaClicked)="onMappaClicked($event)"
+          (markerClicked)="onMarkerClicked($event)"
+           ></div>
+
+      <div class="form-group">
+        <label for="txtIndirizzo">Inserire indirizzo</label>
+        <input type="text" id="txtIndirizzo" class="form-control" placeholder="Indirizzo" aria-describedby="helpId"
+            appGeocodeautocomplete (geocodeResults)="onGeocodeResults($event)">
+
+      </div>
+      <ul class="nav">
+          <li class="nav-item " *ngFor="let geoCode of geoCodes;">
+            <div class="d-flex flex-row align-items-center justify-content-between">
+            <p>
+              {{geoCode.raw.display_name}}
+            </p>
+            <button (click)="onAddMarkerOn(geoCode)" class="btn btn-primary">Aggiungi</button>
+          </div>
+          </li>
+
+      </ul>
     </main>
   </div>
 

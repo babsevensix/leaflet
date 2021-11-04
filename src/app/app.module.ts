@@ -6,6 +6,7 @@ import { LeftBarComponent } from './left-bar/left-bar.component';
 import { TopBarComponent } from './top-bar/top-bar.component';
 import { FooterComponent } from './footer/footer.component';
 import { LeafletMapDirective } from './leaflet-map.directive';
+import { GeocodeautocompleteDirective } from './geocodeautocomplete.directive';
 
 @NgModule({
   declarations: [
@@ -13,7 +14,8 @@ import { LeafletMapDirective } from './leaflet-map.directive';
     LeftBarComponent,
     TopBarComponent,
     FooterComponent,
-    LeafletMapDirective
+    LeafletMapDirective,
+    GeocodeautocompleteDirective
   ],
   imports: [
     BrowserModule
