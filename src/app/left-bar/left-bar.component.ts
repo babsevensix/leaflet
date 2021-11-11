@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { PuntiMappaService } from '../services/punti-mappa.service';
 
 @Component({
   selector: 'app-left-bar',
@@ -7,9 +8,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LeftBarComponent implements OnInit {
 
-  constructor() { }
+
+
+  constructor(public puntiMappaService: PuntiMappaService) { }
 
   ngOnInit(): void {
+
   }
 
 }

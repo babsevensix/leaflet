@@ -1,5 +1,10 @@
 <div class="position-sticky pt-3">
-  <ul class="nav flex-column">
+  <ul style="height: 50vh;">
+    <li *ngFor="let point of puntiMappaService.getPuntiMappa()">
+      {{point.lat}} - {{point.lng}}
+    </li>
+  </ul>
+  <!-- <ul class="nav flex-column">
     <li class="nav-item">
       <a class="nav-link active" aria-current="page" href="#">
         <span data-feather="home"></span>
@@ -69,5 +74,5 @@
         Year-end sale
       </a>
     </li>
-  </ul>
+  </ul> -->
 </div>
