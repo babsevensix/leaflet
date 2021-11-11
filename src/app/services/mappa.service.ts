@@ -1,5 +1,6 @@
 import { ElementRef, Injectable } from '@angular/core';
 import * as L from 'leaflet';
+import { PuntoSullamappa } from 'src/puntosullamappa.model';
 import { PuntiMappaService } from './punti-mappa.service';
 
 @Injectable({
@@ -42,7 +43,7 @@ export class MappaService {
   }
 
 
-   setMarkers(latlngs: L.LatLng[]) {
+   setMarkers(punti: PuntoSullamappa[]) {
     if (this.mappa ) {
 
       if (this._markers.length > 0) {
@@ -51,11 +52,11 @@ export class MappaService {
         });
       }
 
-      this._markers = latlngs.map(latlng => {
-        const marker = L.marker(latlng).addTo(<L.Map>this.mappa);
+      this._markers = punti.map(punto => {
+        const marker = L.marker(punto.point).addTo(<L.Map>this.mappa);
         marker.on('click', () => {
           //this.onMarkerClicked.emit(latlng);
-          this.puntiMappaService.removePuntoMappa(latlng);
+          this.puntiMappaService.removePuntoMappa(punto.point);
           this.setMarkers(this.puntiMappaService.getPuntiMappa());
         });
         return marker;

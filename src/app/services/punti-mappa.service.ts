@@ -1,32 +1,27 @@
 import { Injectable } from '@angular/core';
 import * as L from 'leaflet';
+import { PuntoSullamappa } from 'src/puntosullamappa.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PuntiMappaService {
 
-  latLngs: L.LatLng[] = [L.latLng(41.8901622,12.4998408)];
+  punti: PuntoSullamappa[] = [{ point: L.latLng(41.8901622,12.4998408), date: new Date(Date.now()) }];
 
   constructor() { }
 
-  getPuntiMappa(): L.LatLng[] {
-    return this.latLngs;
+  getPuntiMappa(): PuntoSullamappa[] {
+    return this.punti;
   }
 
   addPuntoMappa(position: L.LatLng) {
-    this.latLngs = [...this.latLngs, position];
+    this.punti = [...this.punti, { point: position, date: new Date(Date.now()) }];
 
   }
 
   removePuntoMappa(position: L.LatLng) {
-    this.latLngs = this.latLngs.filter(latLng => !latLng.equals(position));
+    this.punti = this.punti.filter(punto => !punto.point.equals(position));
 
   }
-
-
-
-
-
-
 }

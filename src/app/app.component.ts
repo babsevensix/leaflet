@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import * as L from 'leaflet';
 import { RawResult } from 'leaflet-geosearch/dist/providers/openStreetMapProvider';
 import { SearchResult } from 'leaflet-geosearch/dist/providers/provider';
+import { PuntoSullamappa } from 'src/puntosullamappa.model';
 import { PuntiMappaService } from './services/punti-mappa.service';
 
 @Component({
@@ -11,7 +12,7 @@ import { PuntiMappaService } from './services/punti-mappa.service';
 })
 export class AppComponent implements OnInit {
 
-  latLngs : L.LatLng[] = [];
+  punti : PuntoSullamappa[] = [];
 
   geoCodes : SearchResult<RawResult>[] = [];
 
@@ -24,7 +25,7 @@ export class AppComponent implements OnInit {
 
   }
   ngOnInit(): void {
-    this.latLngs = this.puntiService.getPuntiMappa();
+    this.punti = this.puntiService.getPuntiMappa();
   }
 
 
@@ -32,7 +33,7 @@ export class AppComponent implements OnInit {
     console.log('onMappaClicked', position);
     // this.latLngs = [...this.latLngs, position];
     this.puntiService.addPuntoMappa(position);
-    this.latLngs = this.puntiService.getPuntiMappa();
+    this.punti = this.puntiService.getPuntiMappa();
   }
 
   onMarkerClicked(position: L.LatLng) : void{
@@ -40,7 +41,7 @@ export class AppComponent implements OnInit {
     console.log('onMarkerClicked', position);
 
     this.puntiService.removePuntoMappa(position);
-    this.latLngs = this.puntiService.getPuntiMappa();
+    this.punti = this.puntiService.getPuntiMappa();
   }
 
   onGeocodeResults(geocodes : SearchResult<RawResult>[]) : void{
@@ -51,6 +52,6 @@ export class AppComponent implements OnInit {
     const latLng =L.latLng(parseFloat(geoCode.raw.boundingbox[0]),parseFloat( geoCode.raw.boundingbox[2]));
 
     this.puntiService.addPuntoMappa(latLng);
-    this.latLngs = this.puntiService.getPuntiMappa();
+    this.punti = this.puntiService.getPuntiMappa();
   }
 }
