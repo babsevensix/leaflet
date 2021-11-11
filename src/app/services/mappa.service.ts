@@ -1,20 +1,23 @@
-import { ElementRef, EventEmitter, Injectable } from '@angular/core';
+import { ElementRef, Injectable } from '@angular/core';
 import * as L from 'leaflet';
+import { PuntiMappaService } from './punti-mappa.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MappaService {
 
-   onMappaClicked: EventEmitter<L.LatLng> = new EventEmitter<L.LatLng>();
-   onMarkerClicked: EventEmitter<L.LatLng> = new EventEmitter<L.LatLng>();
+  //  onMappaClicked: EventEmitter<L.LatLng> = new EventEmitter<L.LatLng>();
+  //  onMarkerClicked: EventEmitter<L.LatLng> = new EventEmitter<L.LatLng>();
 
    _markers: L.Marker[] = [];
 
 
   private mappa: L.Map |undefined;
 
-  constructor() { }
+  constructor(private puntiMappaService: PuntiMappaService) {
+
+   }
 
 
   initMappa(element: ElementRef): void{
@@ -27,10 +30,14 @@ export class MappaService {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(this.mappa);
 
+    this.setMarkers(this.puntiMappaService.getPuntiMappa());
+
 
     this.mappa.on('click', (e: any) => {
 
-      this.onMappaClicked.emit(e);
+      this.puntiMappaService.addPuntoMappa(e.latlng);
+      this.setMarkers(this.puntiMappaService.getPuntiMappa());
+      // this.onMappaClicked.emit(e);
     });
   }
 
@@ -47,7 +54,9 @@ export class MappaService {
       this._markers = latlngs.map(latlng => {
         const marker = L.marker(latlng).addTo(<L.Map>this.mappa);
         marker.on('click', () => {
-          this.onMarkerClicked.emit(latlng);
+          //this.onMarkerClicked.emit(latlng);
+          this.puntiMappaService.removePuntoMappa(latlng);
+          this.setMarkers(this.puntiMappaService.getPuntiMappa());
         });
         return marker;
       });

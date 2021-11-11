@@ -1,42 +1,41 @@
-import { AfterViewInit, Directive, ElementRef, EventEmitter, Input, Output } from '@angular/core';
-import * as L from 'leaflet';
+import { AfterViewInit, Directive, ElementRef } from '@angular/core';
 import { MappaService } from './services/mappa.service';
 
 @Directive({
   selector: '[appLeafletMap]'
 })
 export class LeafletMapDirective implements AfterViewInit {
-  _latlngs: L.LatLng[] = [];
-  _markers: L.Marker[] = [];
+  // _latlngs: L.LatLng[] = [];
+  // _markers: L.Marker[] = [];
 
-  @Input() get latlngs() : L.LatLng[]
-  {
-    return this._latlngs;
-  }
-  set latlngs(value : L.LatLng[]){
-    this._latlngs = value;
-    console.log('setting latlngs');
-    this.mappaService.setMarkers(this._latlngs);
-  }
+  // @Input() get latlngs() : L.LatLng[]
+  // {
+  //   return this._latlngs;
+  // }
+  // set latlngs(value : L.LatLng[]){
+  //   this._latlngs = value;
+  //   console.log('setting latlngs');
+  //   this.mappaService.setMarkers(this._latlngs);
+  // }
 
-  @Output() mappaClicked: EventEmitter<L.LatLng> = new EventEmitter<L.LatLng>();
-  @Output() markerClicked: EventEmitter<L.LatLng> = new EventEmitter<L.LatLng>();
+  // @Output() mappaClicked: EventEmitter<L.LatLng> = new EventEmitter<L.LatLng>();
+  // @Output() markerClicked: EventEmitter<L.LatLng> = new EventEmitter<L.LatLng>();
 
 
 
   constructor(private elementRef: ElementRef, private mappaService: MappaService) { }
   ngAfterViewInit(): void {
     this.mappaService.initMappa(this.elementRef);
-    this.mappaService.onMappaClicked.subscribe((e: any) => {
+    // this.mappaService.onMappaClicked.subscribe((e: any) => {
 
-      this.mappaClicked.emit(e.latlng);
-    });
+    //   this.mappaClicked.emit(e.latlng);
+    // });
 
-    this.mappaService.onMarkerClicked.subscribe((e: any) => {
+    // this.mappaService.onMarkerClicked.subscribe((e: any) => {
 
-      this.markerClicked.emit(e);
-    });
-    this.mappaService.setMarkers(this._latlngs);
+    //   this.markerClicked.emit(e);
+    // });
+    // this.mappaService.setMarkers(this._latlngs);
   }
 
   ngOnInit(): void {
