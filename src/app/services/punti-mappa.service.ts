@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as L from 'leaflet';
+import { Observable, Subject } from 'rxjs';
 import { PuntoSullamappa } from 'src/puntosullamappa.model';
 
 @Injectable({
@@ -7,21 +8,28 @@ import { PuntoSullamappa } from 'src/puntosullamappa.model';
 })
 export class PuntiMappaService {
 
-  punti: PuntoSullamappa[] = [{ point: L.latLng(41.8901622,12.4998408), date: new Date(Date.now()) }];
+  private _puntiSullaMappa$ = new Subject<PuntoSullamappa[]>();
 
-  constructor() { }
 
-  getPuntiMappa(): PuntoSullamappa[] {
-    return this.punti;
+  private _punti: PuntoSullamappa[] = [{ point: L.latLng(41.8901622,12.4998408), date: new Date(Date.now()) }];
+
+  constructor() {
+    this._puntiSullaMappa$.next([...this._punti]);
+  }
+
+  getPuntiMappa$(): Observable<PuntoSullamappa[]> {
+    return this._puntiSullaMappa$.asObservable();
   }
 
   addPuntoMappa(position: L.LatLng) {
-    this.punti = [...this.punti, { point: position, date: new Date(Date.now()) }];
+    this._punti = [...this._punti, { point: position, date: new Date(Date.now()) }];
+    this._puntiSullaMappa$.next([...this._punti]);
 
   }
 
-  removePuntoMappa(position: L.LatLng) {
-    this.punti = this.punti.filter(punto => !punto.point.equals(position));
+  removePuntoMappa(puntoToRemove: PuntoSullamappa) {
+    this._punti = this._punti.filter(punto => !punto.point.equals(puntoToRemove.point));
 
+    this._puntiSullaMappa$.next([...this._punti]);
   }
 }

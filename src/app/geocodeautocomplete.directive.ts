@@ -1,13 +1,17 @@
-import { Directive, EventEmitter, HostListener, Output } from '@angular/core';
+import { Directive, EventEmitter, HostListener, OnInit, Output } from '@angular/core';
 import { OpenStreetMapProvider } from 'leaflet-geosearch';
 import { RawResult } from 'leaflet-geosearch/dist/providers/openStreetMapProvider';
 import { SearchResult } from 'leaflet-geosearch/dist/providers/provider';
+import { debounceTime, Subject } from 'rxjs';
+
 
 
 @Directive({
   selector: '[appGeocodeautocomplete]'
 })
-export class GeocodeautocompleteDirective {
+export class GeocodeautocompleteDirective implements OnInit {
+
+  private _textSearch = new Subject<string>();
 
   private provider : OpenStreetMapProvider|undefined;
 
@@ -15,10 +19,9 @@ export class GeocodeautocompleteDirective {
 
   @HostListener('input', ['$event']) async onInput(event: any) {
 
-    if (this.provider) {
-      const results:SearchResult<RawResult>[] = await this.provider.search({ query: event.target.value });
-      this.geocodeResults.emit(results);
-    }
+    this._textSearch.next(event.target.value);
+
+
   }
 
 
@@ -29,6 +32,19 @@ export class GeocodeautocompleteDirective {
 
 
   }
+  ngOnInit(): void {
+    this._textSearch.asObservable()
+    .pipe(
+      debounceTime(1000),
+    )
+    .subscribe( async (searchText)=>{
+      if (this.provider) {
+        const results:SearchResult<RawResult>[] = await this.provider.search({ query: searchText });
+        this.geocodeResults.emit(results);
+      }
+    })
+  }
 
 }
+
 

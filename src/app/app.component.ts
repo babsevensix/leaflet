@@ -12,46 +12,37 @@ import { PuntiMappaService } from './services/punti-mappa.service';
 })
 export class AppComponent implements OnInit {
 
-  punti : PuntoSullamappa[] = [];
+  punti: PuntoSullamappa[] = [];
 
-  geoCodes : SearchResult<RawResult>[] = [];
+  geoCodes: SearchResult<RawResult>[] = [];
 
-  /**
-   *
-   */
+
   constructor(private puntiService: PuntiMappaService) {
-
-
-
   }
   ngOnInit(): void {
-    this.punti = this.puntiService.getPuntiMappa();
+    this.puntiService.getPuntiMappa$().subscribe(punti => {
+      this.punti = punti;
+    });
+
   }
 
 
-  onMappaClicked(position: L.LatLng) : void{
+  onMappaClicked(position: L.LatLng): void {
     console.log('onMappaClicked', position);
-    // this.latLngs = [...this.latLngs, position];
     this.puntiService.addPuntoMappa(position);
-    this.punti = this.puntiService.getPuntiMappa();
+
+
   }
 
-  onMarkerClicked(position: L.LatLng) : void{
 
-    console.log('onMarkerClicked', position);
-
-    this.puntiService.removePuntoMappa(position);
-    this.punti = this.puntiService.getPuntiMappa();
-  }
-
-  onGeocodeResults(geocodes : SearchResult<RawResult>[]) : void{
+  onGeocodeResults(geocodes: SearchResult<RawResult>[]): void {
     this.geoCodes = geocodes;
   }
 
-  onAddMarkerOn(geoCode: SearchResult<RawResult>): void{
-    const latLng =L.latLng(parseFloat(geoCode.raw.boundingbox[0]),parseFloat( geoCode.raw.boundingbox[2]));
+  onAddMarkerOn(geoCode: SearchResult<RawResult>): void {
+    const latLng = L.latLng(parseFloat(geoCode.raw.boundingbox[0]), parseFloat(geoCode.raw.boundingbox[2]));
 
     this.puntiService.addPuntoMappa(latLng);
-    this.punti = this.puntiService.getPuntiMappa();
+
   }
 }

@@ -1,5 +1,6 @@
 import { ElementRef, Injectable } from '@angular/core';
 import * as L from 'leaflet';
+import { map } from 'rxjs/operators';
 import { PuntoSullamappa } from 'src/puntosullamappa.model';
 import { PuntiMappaService } from './punti-mappa.service';
 
@@ -8,20 +9,19 @@ import { PuntiMappaService } from './punti-mappa.service';
 })
 export class MappaService {
 
-  //  onMappaClicked: EventEmitter<L.LatLng> = new EventEmitter<L.LatLng>();
-  //  onMarkerClicked: EventEmitter<L.LatLng> = new EventEmitter<L.LatLng>();
-
-   _markers: L.Marker[] = [];
 
 
-  private mappa: L.Map |undefined;
+  private _markers: L.Marker[] = [];
+
+
+  private mappa: L.Map | undefined;
 
   constructor(private puntiMappaService: PuntiMappaService) {
 
-   }
+  }
 
 
-  initMappa(element: ElementRef): void{
+  initMappa(element: ElementRef): void {
 
     this.mappa = L.map(element.nativeElement, {
       center: [41.89, 12.49],
@@ -31,36 +31,40 @@ export class MappaService {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(this.mappa);
 
-    this.setMarkers(this.puntiMappaService.getPuntiMappa());
 
+    this.puntiMappaService.getPuntiMappa$()
+      .pipe(
+        map(punti => {
+          this.clearAllMarkers();
+          return punti.map(p => {
+            return this.addMarkerToMap(p);
+          });
+        })
+      )
+      .subscribe(markers => {
+        this._markers = markers;
 
+      }
+      );
     this.mappa.on('click', (e: any) => {
 
       this.puntiMappaService.addPuntoMappa(e.latlng);
-      this.setMarkers(this.puntiMappaService.getPuntiMappa());
-      // this.onMappaClicked.emit(e);
     });
   }
 
+  private addMarkerToMap(puntoSullaMappa: PuntoSullamappa): L.Marker {
+    return L.marker(puntoSullaMappa.point)
+      .addTo(<L.Map>this.mappa)
+      .on('click', () => {
 
-   setMarkers(punti: PuntoSullamappa[]) {
-    if (this.mappa ) {
+        this.puntiMappaService.removePuntoMappa(puntoSullaMappa);
 
-      if (this._markers.length > 0) {
-        this._markers.forEach(m => {
-          (<L.Map>this.mappa).removeLayer(m);
-        });
-      }
-
-      this._markers = punti.map(punto => {
-        const marker = L.marker(punto.point).addTo(<L.Map>this.mappa);
-        marker.on('click', () => {
-          //this.onMarkerClicked.emit(latlng);
-          this.puntiMappaService.removePuntoMappa(punto.point);
-          this.setMarkers(this.puntiMappaService.getPuntiMappa());
-        });
-        return marker;
       });
-    }
+  }
+
+  private clearAllMarkers() {
+    this._markers.forEach(m => {
+      (<L.Map>this.mappa).removeLayer(m);
+    });
   }
 }
