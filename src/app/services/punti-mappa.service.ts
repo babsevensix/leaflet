@@ -11,7 +11,7 @@ export class PuntiMappaService {
   private _puntiSullaMappa$ = new Subject<PuntoSullamappa[]>();
 
 
-  private _punti: PuntoSullamappa[] = [{ point: L.latLng(41.8901622,12.4998408), date: new Date(Date.now()) }];
+  private _punti: PuntoSullamappa[] = [{ point: L.latLng(41.8901622, 12.4998408), date: new Date(Date.now()) }];
 
   constructor() {
     this._puntiSullaMappa$.next([...this._punti]);

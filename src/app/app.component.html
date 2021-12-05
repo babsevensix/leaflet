@@ -6,7 +6,8 @@
       <app-left-bar></app-left-bar>
     </nav>
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+      <div
+        class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">Leaflet map</h1>
       </div>
       <!-- <div class="my-4 w-100" class="map" appLeafletMap
@@ -14,29 +15,29 @@
           (mappaClicked)="onMappaClicked($event)"
           (markerClicked)="onMarkerClicked($event)"
            ></div> -->
-           <div class="my-4 w-100" class="map" appLeafletMap
-
-            ></div>
+      <div class="my-4 w-100" class="map" appLeafletMap></div>
 
       <div class="form-group">
         <label for="txtIndirizzo">Inserire indirizzo</label>
         <input type="text" id="txtIndirizzo" class="form-control" placeholder="Indirizzo" aria-describedby="helpId"
-            appGeocodeautocomplete (geocodeResults)="onGeocodeResults($event)">
+          appGeocodeautocomplete (geocodeResults)="onGeocodeResults($event)">
 
       </div>
+
       <ul class="nav">
-          <li class="nav-item " *ngFor="let geoCode of geoCodes;">
-            <div class="d-flex flex-row align-items-center justify-content-between">
+        <li class="nav-item " *ngFor="let feature of geoCodes?.features;">
+          <div class="d-flex flex-row align-items-center justify-content-between">
             <p>
-              {{geoCode.raw.display_name}}
+              {{feature.properties.label}}
             </p>
-            <button (click)="onAddMarkerOn(geoCode)" class="btn btn-primary">Aggiungi</button>
+            <button (click)="onFromMap(feature)" class="btn btn-primary">From</button>
+            <button (click)="onToMap(feature)" class="btn btn-primary">To</button>
           </div>
-          </li>
+        </li>
 
       </ul>
+      <button (click)="onCalculateDirections()" class="btn btn-primary">Search percorso</button>
     </main>
   </div>
 
 </div>
-

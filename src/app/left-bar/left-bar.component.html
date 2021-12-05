@@ -1,8 +1,9 @@
-<div class="position-sticky pt-3" >
+<div class="position-sticky pt-3">
 
   <ul style="height: 50vh;">
     <li *ngFor="let punto of (puntiMappaService.getPuntiMappa$() | async)">
-      {{punto.point.lat | number:'1.2'}} - {{punto.point.lng |  number:'1.2'}} : {{punto.date | date:'dd/MM/yyyy E HH:mm'}}
+      {{punto.point.lat | number:'1.2'}} - {{punto.point.lng |  number:'1.2'}} :
+      {{punto.date | date:'dd/MM/yyyy E HH:mm'}}
     </li>
   </ul>
   <!-- <ul class="nav flex-column">

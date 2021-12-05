@@ -1,12 +1,16 @@
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppComponent } from './app.component';
-import { LeftBarComponent } from './left-bar/left-bar.component';
-import { TopBarComponent } from './top-bar/top-bar.component';
 import { FooterComponent } from './footer/footer.component';
-import { LeafletMapDirective } from './leaflet-map.directive';
 import { GeocodeautocompleteDirective } from './geocodeautocomplete.directive';
+import { LeafletMapDirective } from './leaflet-map.directive';
+import { LeftBarComponent } from './left-bar/left-bar.component';
+import { PostAuthServiceInteceptor } from './my-interceptor.service';
+import { TopBarComponent } from './top-bar/top-bar.component';
+
+
+
 
 @NgModule({
   declarations: [
@@ -18,9 +22,14 @@ import { GeocodeautocompleteDirective } from './geocodeautocomplete.directive';
     GeocodeautocompleteDirective
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [{
+    provide: HTTP_INTERCEPTORS,
+    useClass: PostAuthServiceInteceptor,
+    multi: true
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

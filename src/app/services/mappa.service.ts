@@ -1,8 +1,10 @@
 import { ElementRef, Injectable } from '@angular/core';
+import * as geojson from 'geojson';
 import * as L from 'leaflet';
 import { map } from 'rxjs/operators';
 import { PuntoSullamappa } from 'src/puntosullamappa.model';
 import { PuntiMappaService } from './punti-mappa.service';
+
 
 @Injectable({
   providedIn: 'root'
@@ -66,5 +68,15 @@ export class MappaService {
     this._markers.forEach(m => {
       (<L.Map>this.mappa).removeLayer(m);
     });
+  }
+
+  setGeoJson(geoJson: string) {
+    if (this.mappa) {
+      var geoJsonLayer = L.geoJSON(JSON.parse(geoJson) as geojson.GeoJsonObject).addTo(this.mappa);
+      this.mappa.flyToBounds(geoJsonLayer.getBounds());
+      // geoJsonLayer.eachLayer(function (layer) {
+      //   layer._path.id = 'feature-' + layer.feature.properties.id;
+      // });
+    }
   }
 }

@@ -11,7 +11,7 @@ export class LeftBarComponent implements OnInit {
 
 
   constructor(public puntiMappaService: PuntiMappaService) {
-    this.puntiMappaService.getPuntiMappa$().subscribe(res=>{
+    this.puntiMappaService.getPuntiMappa$().subscribe(res => {
       console.log(res);
     })
   }
